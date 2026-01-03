@@ -1,1 +1,40 @@
+name: Daily contribution
 
+on:
+  schedule:
+    - cron: '0 0 * * *' # runs daily at 00:00 UTC — change if needed
+  workflow_dispatch: {}    # allows manual run
+
+permissions:
+  contents: write
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false # we will use a PAT to push
+
+      - name: Configure git author
+        env:
+          AUTHOR_NAME: ${{ secrets.COMMIT_NAME }}
+          AUTHOR_EMAIL: ${{ secrets.COMMIT_EMAIL }}
+        run: |
+          git config user.name "${AUTHOR_NAME}"
+          git config user.email "${AUTHOR_EMAIL}"
+
+      - name: Make or update daily file
+        run: |
+          mkdir -p contributions
+          echo "$(date -I) - automated contribution from GitHub Actions" >> contributions/contributions.log
+          git add contributions/contributions.log
+          git commit -m "Daily contribution: $(date -I)" || echo "No changes to commit"
+
+      - name: Push changes using PAT
+        env:
+          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        run: |
+          # Default branch: main. If your default branch is different, replace `main` below.
+          git push "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" HEAD:main

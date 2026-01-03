@@ -6,8 +6,8 @@ set -euo pipefail
 REPO_DIR="/path/to/local/repo"        # <-- REPLACE: absolute path to your local repo clone
 BRANCH="main"                         # <-- REPLACE if your default branch is different
 
-AUTHOR_NAME="Your Name"               # <-- REPLACE: name that will appear on the commit
-AUTHOR_EMAIL="you@example.com"        # <-- REPLACE: must be an email registered to your GitHub account
+AUTHOR_NAME="balamaloth"               # <-- REPLACE: name that will appear on the commit
+AUTHOR_EMAIL="balasainik3@gmail.com"        # <-- REPLACE: must be an email registered to your GitHub account
 
 cd "$REPO_DIR"
 git checkout "$BRANCH"
